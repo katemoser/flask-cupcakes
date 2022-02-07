@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from models import db, connect_db, Cupcake
 
 """Flask app for Cupcakes"""
@@ -18,8 +18,27 @@ def display_cupakes():
     """ Get data about all cupcakes"""
 
     cupcakes = Cupcake.query.all()
-    "serialize here"
+    serialized = [cupcake.serialize() for cupcake in cupcakes]
 
 
 
-    return jsonify("JSON THING")
+    # we will have an if else I'm assuming
+
+    new_cupcake = Cupcake(
+        id = request.json.id,
+        flavor = request.json.flavor,
+        size = request.json.size,
+        rating = request.json.rating,
+        image = request.json.image,
+    )
+
+    return jsonify(cupcakes = serialized)
+
+
+@app.route("/api/cupcakes/<cupcake-id>", methods=['GET'])
+def display_cupake(cupcake_id):
+    """ Get data about a single cupcake."""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    return jsonify(cupcake = cupcake)
