@@ -13,6 +13,7 @@ connect_db(app)
 db.create_all()
 
 
+#CR: makes it easier on the reader to start with the route like app.get
 @app.route("/api/cupcakes", methods=['GET'])
 def display_cupakes():
     """ Get data about all cupcakes"""
@@ -28,20 +29,22 @@ def display_cupake(cupcake_id):
     """ Get data about a single cupcake."""
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
+    serialized = cupcake.serialize()
 
-    return jsonify(cupcake=cupcake)
+    return jsonify(cupcake=serialized)
 
 
-@app.route("api/cupcakes", methods=["POST"])
+@app.route("/api/cupcakes", methods=["POST"])
 def make_new_cupcake():
     """Make a new cupcake"""
 
+    image = request.json.get("image") or None #CR: if the left is falsy, try the right
+
     new_cupcake = Cupcake(
-        id=request.json.id,
-        flavor=request.json.flavor,
-        size=request.json.size,
-        rating=request.json.rating,
-        image=request.json.image,
+        flavor=request.json["flavor"],
+        size=request.json["size"],
+        rating=request.json["rating"],
+        image=image,
     )
 
     db.session.add(new_cupcake)
