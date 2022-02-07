@@ -13,3 +13,8 @@ class Cupcake(db.Model):
     size = db.Column(db.Text, nullable = False)
     rating = db.Column(db.Integer, nullable = False)
     image = db.Column(db.Text, nullable = False, default="https://tinyurl.com/demo-cupcake")
+
+
+
+
+    #TODO: Build a serializer
