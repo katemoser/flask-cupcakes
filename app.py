@@ -63,6 +63,8 @@ def update_cupcake(cupcake_id):
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
 
+    ## TODO: Fix the rating = 0 problem
+
     cupcake.flavor = request.json.get("flavor") or cupcake.flavor
     cupcake.size = request.json.get("size") or cupcake.size
     cupcake.rating = request.json.get("rating") or cupcake.rating
@@ -82,6 +84,8 @@ def delete_cupcake(cupcake_id):
 
     Cupcake.query.get_or_404(cupcake_id)
     Cupcake.query.filter_by(id=cupcake_id).delete()
+
+    # db.session.delete(cupcake)
 
     db.session.commit()
 
