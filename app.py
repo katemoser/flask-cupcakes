@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from models import db, connect_db, Cupcake
 
 """Flask app for Cupcakes"""
@@ -12,6 +12,12 @@ app.config["SQLALCHEMY_ECHO"] = True
 
 connect_db(app)
 db.create_all()
+
+@app.get("/")
+def display_homepage():
+
+
+    return render_template("base.html")
 
 
 #CR: makes it easier on the reader to start with the route like app.get
@@ -39,13 +45,13 @@ def display_cupake(cupcake_id):
 def make_new_cupcake():
     """Make a new cupcake"""
 
-    image = request.json.get("image") or None #CR: if the left is falsy, try the right
+    # image = request.json.get("image") or None #CR: if the left is falsy, try the right
 
     new_cupcake = Cupcake(
         flavor=request.json["flavor"],
         size=request.json["size"],
         rating=request.json["rating"],
-        image=image,
+        # image=image,
     )
 
     db.session.add(new_cupcake)
