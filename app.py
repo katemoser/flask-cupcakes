@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from models import db, connect_db, Cupcake
 
 """Flask app for Cupcakes"""
+# FLASK_RUN_PORT=5001 flask run 
 
 app = Flask(__name__)
 
@@ -71,3 +72,17 @@ def update_cupcake(cupcake_id):
 
     serialized = cupcake.serialize()
     return jsonify(cupcake=serialized)
+
+
+@app.delete("/api/cupcakes/<int:cupcake_id>")
+def delete_cupcake(cupcake_id):
+    """Delete cupcake with the id passed in the URL.
+        returns JSON: {deleted: [cupcake-id]}.
+    """
+
+    Cupcake.query.get_or_404(cupcake_id)
+    Cupcake.query.filter_by(id=cupcake_id).delete()
+
+    db.session.commit()
+
+    return jsonify(deleted=cupcake_id)
